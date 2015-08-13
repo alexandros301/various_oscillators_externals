@@ -1,0 +1,58 @@
+#N canvas 119 88 850 533 10;
+#X floatatom 49 60 5 0 0 0 - - -, f 5;
+#X obj 71 239 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 71 259 metro 100;
+#N canvas 0 50 450 278 (subpatch) 0;
+#X array randOsc 512 float 2;
+#X coords 0 1 512 -1 200 140 1 0 0;
+#X restore 45 337 graph;
+#X obj 32 13 cnv 15 320 40 empty empty empty 20 12 0 14 -204786 -66577
+0;
+#X text 303 216 inlets:;
+#X text 314 294 4 (control): phase reset (0 - 1);
+#X text 304 347 outlets:;
+#X text 315 368 1 (signal): the oscillator's output;
+#X text 302 60 Arguments: none. I found it a bit to difficult to use
+arguments in case no signal is connected to the respective inlet \,
+so I disabled them altogether. You're more than welcome to hack the
+code and set this feature :);
+#X text 304 128 You can set predifined arguments like this ->;
+#X obj 629 127 loadbang;
+#X text 316 313 * Accepts floats too;
+#X text 315 237 1 (singal)*: frequency;
+#X floatatom 85 154 5 0 0 0 - - -, f 5;
+#X obj 85 173 pack f 20;
+#X obj 85 195 line~;
+#X floatatom 126 203 5 0 0 0 - - -, f 5;
+#X text 314 274 3 (signal)*: power to raise the sinewave to;
+#X text 619 274 (lowest value should be 0);
+#X obj 49 217 randOsc~;
+#X obj 49 284 tabwrite~ randOsc;
+#X msg 629 149 220 0.5 2;
+#X obj 629 171 unpack f f f;
+#X obj 629 198 randOsc~;
+#X text 40 21 Random oscillator (not white noise);
+#X text 314 254 2 (signal)*: cross-fade;
+#X text 482 254 between curved and angled direction change;
+#X obj 69 84 hsl 128 15 0 1 0 0 empty empty xfade 5 8 0 10 -262144
+-1 -1 0 1;
+#X obj 66 104 pack f 20;
+#X obj 66 126 line~;
+#X text 316 454 Alexandros Drymonitis May 2014;
+#X connect 0 0 20 0;
+#X connect 1 0 2 0;
+#X connect 2 0 21 0;
+#X connect 11 0 22 0;
+#X connect 14 0 15 0;
+#X connect 15 0 16 0;
+#X connect 16 0 20 2;
+#X connect 17 0 20 3;
+#X connect 20 0 21 0;
+#X connect 22 0 23 0;
+#X connect 23 0 24 0;
+#X connect 23 1 24 1;
+#X connect 23 2 24 2;
+#X connect 28 0 29 0;
+#X connect 29 0 30 0;
+#X connect 30 0 20 1;
