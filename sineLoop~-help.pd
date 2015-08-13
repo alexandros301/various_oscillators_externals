@@ -14,7 +14,7 @@
 0;
 #X text 34 67 The output of the oscillator \, multiplyed by feedback
 \, is added to itself to brighten the sound.;
-#X text 34 97 This external is a translation from the source code of
+#X text 34 97 This external is a translation from the SineLoop object source code of
 Pyo \, a Python module for DSP \, found at http://ajaxsoundstudio.com/software/pyo/
 ;
 #X text 469 77 Inlets:;
