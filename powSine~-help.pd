@@ -1,0 +1,103 @@
+#N canvas 248 88 931 551 10;
+#X floatatom 49 61 5 0 0 0 - - -, f 5;
+#X obj 71 166 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 71 186 metro 100;
+#N canvas 0 50 450 278 (subpatch) 0;
+#X array powSine 256 float 2;
+#X coords 0 1 256 -1 200 140 1 0 0;
+#X restore 45 259 graph;
+#X obj 49 144 powSine~;
+#X obj 32 13 cnv 15 320 40 empty empty empty 20 12 0 14 -204786 -66577
+0;
+#X text 40 21 Sinewave ocillator raised to a power;
+#X obj 49 211 tabwrite~ powSine;
+#X text 377 189 inlets:;
+#X text 388 325 4 (control): phase reset (0 - 1);
+#X text 378 380 outlets:;
+#X text 389 401 1 (signal): the oscillator's output;
+#X text 376 13 Arguments: none. I found it a bit to difficult to use
+arguments in case no signal is connected to the respective inlet \,
+so I disabled them altogether. You're more than welcome to hack the
+code and set this feature :);
+#X text 378 81 You can set predifined arguments like this ->;
+#X obj 703 80 loadbang;
+#X msg 703 102 220 0.5;
+#X obj 703 124 unpack;
+#X obj 703 146 powSine~;
+#X text 390 344 * Accepts floats too;
+#X text 389 210 1 (singal)*: frequency;
+#X text 388 227 2 (signal)*: phase (used for phase modulation);
+#X floatatom 79 81 5 0 0 0 - - -, f 5;
+#X obj 79 100 pack f 20;
+#X obj 79 122 line~;
+#X floatatom 118 122 5 0 0 0 - - -, f 5;
+#N canvas 313 115 605 466 phase-modulation 0;
+#X floatatom 33 46 5 0 0 0 - - -, f 5;
+#X obj 33 201 powSine~;
+#X obj 33 319 *~;
+#X obj 33 346 dac~;
+#X obj 54 232 hsl 128 15 0 1 0 0 empty empty amp 5 8 0 10 -262144 -1
+-1 0 1;
+#X obj 51 252 pow 4;
+#X obj 51 274 pack f 20;
+#X obj 51 296 line~;
+#X floatatom 49 93 5 0 0 2 modulator - -, f 5;
+#X obj 49 112 osc~;
+#X obj 49 134 *~;
+#X floatatom 123 66 5 0 0 2 index - -, f 5;
+#X obj 123 95 pack f 20;
+#X obj 123 117 line~;
+#N canvas 0 50 450 278 (subpatch) 0;
+#X array pm_powSine 512 float 2;
+#X coords 0 1 511 -1 200 140 1;
+#X restore 279 168 graph;
+#X obj 110 346 tabwrite~ pm_powSine;
+#X obj 110 302 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 110 322 metro 100;
+#X text 128 300 graph it;
+#X text 31 392 Since the first three inlets are signal inlets \, you
+can modulate them too with oscillators or other signals;
+#X obj 63 157 loadbang;
+#X msg 63 179 1;
+#X text 160 52 'good values' are between 0 and 1;
+#X text 165 68 I always take it up to 2 \, or even higher :);
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 0 3 1;
+#X connect 2 0 15 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 7 0 2 1;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
+#X connect 10 0 1 1;
+#X connect 11 0 12 0;
+#X connect 12 0 13 0;
+#X connect 13 0 10 1;
+#X connect 16 0 17 0;
+#X connect 17 0 15 0;
+#X connect 20 0 21 0;
+#X connect 21 0 1 2;
+#X restore 380 427 pd phase-modulation;
+#X text 388 245 3 (signal)*: power to raise the sinewave to;
+#X text 697 245 (lowest value should be 0);
+#X text 465 262 a value of 0.5 creates an unaltered sinewave \, 0 creates
+a squarewave. values between 0 and 1 will broaden the sinewave's pulses
+\, and higher than 1 will narrow them;
+#X text 380 478 Alexandros Drymonitis May 2014;
+#X connect 0 0 4 0;
+#X connect 1 0 2 0;
+#X connect 2 0 7 0;
+#X connect 4 0 7 0;
+#X connect 14 0 15 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 16 1 17 2;
+#X connect 21 0 22 0;
+#X connect 22 0 23 0;
+#X connect 23 0 4 2;
+#X connect 24 0 4 3;
