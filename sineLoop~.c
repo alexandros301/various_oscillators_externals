@@ -1,8 +1,8 @@
-/******************************************************************
- *   [sineLoop~] external oscillator that feeds its output        *
- *   back to its input. Code translated from Pyo's SineLoop class *
- *   written by Alexandros Drymonitis                             *
- ******************************************************************/
+/*******************************************************************
+ *   [sineLoop~] external oscillator that feeds its output         *
+ *   back to its input. Code translated from Pyo's SineLoop object *
+ *   written by Alexandros Drymonitis                              *
+ *******************************************************************/
 
 // Header files required by Pure Data
 #include "m_pd.h"
@@ -21,17 +21,17 @@ static float one_over_step = 1.0 / SINELOOP_STEP;
 
 // The object structure
 typedef struct _sineLoop {
-	      // The Pd object
-        t_object obj;
-	      // Convert floats to signals
-        t_float x_f;
-	      // Rest of variables
-	      float x_frequency;
-	      // float x_power; // use this variable only after the argument problem is solved
-        float x_phase;
-        float x_si; // sample increment
-        float x_sifactor; // factor for generating sampling increment
-        float x_sr; // sampling rate
+	// The Pd object
+       	t_object obj;
+        // Convert floats to signals
+       	t_float x_f;
+      	// Rest of variables
+      	float x_frequency;
+      	// float x_power; // use this variable only after the argument problem is solved
+       	float x_phase;
+       	float x_si; // sample increment
+       	float x_sifactor; // factor for generating sampling increment
+       	float x_sr; // sampling rate
         t_float x_last_sample;
 } t_sineLoop;
 
@@ -48,14 +48,14 @@ static void *sineLoop_new(void)
 	// Basic object setup
 
 	// Instantiate a new feedbackSine~ object
-	t_sineLoop *x = (t_sineLoop *) pd_new(sineLoop_class);
+  	t_sineLoop *x = (t_sineLoop *) pd_new(sineLoop_class);
 
-	// Create one additional singal inlet and one control inlet, the first one is on the house
-  inlet_new(&x->obj, &x->obj.ob_pd, gensym("signal"), gensym("signal"));
-	inlet_new(&x->obj, &x->obj.ob_pd, &s_float, gensym("ft1"));
+  	// Create one additional singal inlet and one control inlet, the first one is on the house
+  	inlet_new(&x->obj, &x->obj.ob_pd, gensym("signal"), gensym("signal"));
+  	inlet_new(&x->obj, &x->obj.ob_pd, &s_float, gensym("ft1"));
 
-  // Create one signal outlet
-  outlet_new(&x->obj, gensym("signal"));
+  	// Create one signal outlet
+  	outlet_new(&x->obj, gensym("signal"));
 
 	// Initialize phase and frequency to 0
 	x->x_phase = 0;
@@ -87,46 +87,46 @@ static t_int *sineLoop_perform(t_int *w)
 	t_int n = w[5];
 
 	// Dereference components from the object structure
-  t_float last_sample = x->x_last_sample;
+  	t_float last_sample = x->x_last_sample;
 	float si_factor = x->x_sifactor;
 	float si = x->x_si;
 	float phase = x->x_phase;
 	// Local variables
 	float phase_local;
-  float feedback;
-  float frac;
-  int int_part;
+  	float feedback;
+  	float frac;
+  	int int_part;
 	float step = (float) SINELOOP_STEP;
 
 	// Perform the DSP loop
 	while(n--){
-    // add it to the frequency
+        // add it to the frequency
 		si = *frequency++ * si_factor;
-    // take the current out sample for the feedback
-    feedback = *fb_amount++;
-    // clip it
-    if(feedback >= 1.0) feedback = 1.0;
-    else if(feedback < 0.0) feedback = 0.0;
-    feedback *= step;
+		// take the current out sample for the feedback
+    		feedback = *fb_amount++;
+    		// clip it
+    		if(feedback >= 1.0) feedback = 1.0;
+    		else if(feedback < 0.0) feedback = 0.0;
+    		feedback *= step;
 
-    // wrap phase (copied from SineLoop code)
-    if(phase < 0) phase += ((int)(-phase * one_over_step) + 1) * step;
-    else if(phase >= step) phase -= (int)(phase * one_over_step) * step;
+    		// wrap phase (copied from SineLoop code)
+    		if(phase < 0) phase += ((int)(-phase * one_over_step) + 1) * step;
+    		else if(phase >= step) phase -= (int)(phase * one_over_step) * step;
 
-    // add the last sample with its index
-    phase_local = phase + last_sample * feedback;
-    // wrap local phase
-    if(phase_local < 0) phase_local += ((int)(-phase_local * one_over_step) + 1) * step;
-    else if(phase_local >= step) phase_local -= (int)(phase_local * one_over_step) * step;
+    		// add the last sample with its index
+    		phase_local = phase + last_sample * feedback;
+    		// wrap local phase
+    		if(phase_local < 0) phase_local += ((int)(-phase_local * one_over_step) + 1) * step;
+    		else if(phase_local >= step) phase_local -= (int)(phase_local * one_over_step) * step;
 
-    int_part = (int)phase_local;
-    frac = phase_local - int_part;
-    *out++ = last_sample = sine_tab[int_part] * (1.0 - frac) + sine_tab[int_part + 1] * frac;
+    		int_part = (int)phase_local;
+    		frac = phase_local - int_part;
+    		*out++ = last_sample = sine_tab[int_part] * (1.0 - frac) + sine_tab[int_part + 1] * frac;
 		phase += si;
 	}
 	// Update object's phase and last_sample variables
 	x->x_phase = phase;
-  x->x_last_sample = last_sample;
+  	x->x_last_sample = last_sample;
 
 	// Return the next address in the DSP chain
 	return w + 6;
@@ -156,20 +156,20 @@ static void sineLoop_dsp(t_sineLoop *x, t_signal **sp)
 
 static void make_cos_tab(void)
 {
-  int i;
-  float *fp, phase, phsinc = (2. * 3.14159) / SINELOOP_STEP;
+  	int i;
+  	float *fp, phase, phsinc = (2. * 3.14159) / SINELOOP_STEP;
 
-  // first check if a [sineLoop~] object has already been created
-  // if it has, don't acquire memory, but use the already existing table
-  if(sine_tab) return;
-  // this is copied from [cos~]
-  sine_tab = (float *)getbytes(sizeof(float) * (SINELOOP_STEP+1));
+  	// first check if a [sineLoop~] object has already been created
+  	// if it has, don't acquire memory, but use the already existing table
+  	if(sine_tab) return;
+  	// this is copied from [cos~]
+  	sine_tab = (float *)getbytes(sizeof(float) * (SINELOOP_STEP+1));
 
-  for (i = 0, fp = sine_tab, phase = 0; i < SINELOOP_STEP; i++, fp++, phase += phsinc)
-    *fp = cos(phase);
+  	for (i = 0, fp = sine_tab, phase = 0; i < SINELOOP_STEP; i++, fp++, phase += phsinc)
+	  *fp = cos(phase);
 
-  // copy to first element to the last position of the table for interpolation
-  sine_tab[SINELOOP_STEP] = sine_tab[0];
+  	// copy to first element to the last position of the table for interpolation
+  	sine_tab[SINELOOP_STEP] = sine_tab[0];
 }
 
 // The Pd class definition function
@@ -185,13 +185,13 @@ void sineLoop_tilde_setup(void)
 	class_addmethod(sineLoop_class, (t_method)sineLoop_dsp, gensym("dsp"), A_CANT, 0);
 
 	// Bind the method to receive a float in the last inlet (control) to reset the phase
-  class_addmethod(sineLoop_class, (t_method)sineLoop_ft1, gensym("ft1"), A_FLOAT, 0);
+  	class_addmethod(sineLoop_class, (t_method)sineLoop_ft1, gensym("ft1"), A_FLOAT, 0);
 
-  // fill in the lookup table
-  make_cos_tab();
+  	// fill in the lookup table
+  	make_cos_tab();
 
 	// Print authorship to Pd window
-	post("sineLoop~: Feedback sinewave oscillator\ncode translated from Pyo's SineLoop class\n external by Alexandros Drymonitis");
+	post("sineLoop~: Feedback sinewave oscillator\ncode translated from Pyo's SineLoop object\n external by Alexandros Drymonitis");
 }
 
 // Method to reset oscillator's phase with float input in last inlet (control)
