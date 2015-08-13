@@ -1,0 +1,6 @@
+Figure out how to enable arguments which can be overridden by signals.
+
+Make all oscillators table look-up, instead of using the cos() function for every sample (except [sineLoop~],
+this is alread a table loop-up oscillator).
+
+Make more oscillator?...
