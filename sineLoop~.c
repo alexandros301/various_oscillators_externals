@@ -191,7 +191,7 @@ void sineLoop_tilde_setup(void)
   	make_cos_tab();
 
 	// Print authorship to Pd window
-	post("sineLoop~: Feedback sinewave oscillator\ncode translated from Pyo's SineLoop object\n external by Alexandros Drymonitis");
+	post("sineLoop~: Feedback sinewave oscillator\ncode translated from Pyo's SineLoop object source code\n external by Alexandros Drymonitis");
 }
 
 // Method to reset oscillator's phase with float input in last inlet (control)
