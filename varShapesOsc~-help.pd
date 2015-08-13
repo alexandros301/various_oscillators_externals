@@ -1,0 +1,145 @@
+#N canvas 125 88 1038 652 10;
+#X floatatom 49 61 5 0 0 0 - - -, f 5;
+#X obj 71 256 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 71 276 metro 100;
+#N canvas 0 50 450 278 (subpatch) 0;
+#X array varShapesOsc 512 float 2;
+#X coords 0 1 512 -1 200 140 1 0 0;
+#X restore 45 347 graph;
+#X obj 32 13 cnv 15 320 40 empty empty empty 20 12 0 14 -204786 -66577
+0;
+#X text 413 212 inlets:;
+#X text 414 527 outlets:;
+#X text 425 548 1 (signal): the oscillator's output;
+#X text 414 35 Arguments: none. I found it a bit to difficult to use
+arguments in case no signal is connected to the respective inlet \,
+so I disabled them altogether. You're more than welcome to hack the
+code and set this feature :);
+#X text 414 104 You can set predifined arguments like this ->;
+#X obj 741 102 loadbang;
+#X text 426 495 * Accepts floats too;
+#X text 425 233 1 (singal)*: frequency;
+#X text 424 250 2 (signal)*: phase (used for phase modulation);
+#X obj 74 100 pack f 20;
+#X obj 74 122 line~;
+#X floatatom 159 234 5 0 0 0 - - -, f 5;
+#N canvas 313 115 605 466 phase-modulation 0;
+#X floatatom -67 46 5 0 0 0 - - -, f 5;
+#X obj -67 349 *~;
+#X obj -67 376 dac~;
+#X obj -47 262 hsl 128 15 0 1 0 0 empty empty amp 5 8 0 10 -262144
+-1 -1 0 1;
+#X obj -50 282 pow 4;
+#X obj -50 304 pack f 20;
+#X obj -50 326 line~;
+#X floatatom -53 93 5 0 0 2 modulator - -, f 5;
+#X obj -53 112 osc~;
+#X obj -53 134 *~;
+#X floatatom 23 66 5 0 0 2 index - -, f 5;
+#X obj 23 95 pack f 20;
+#X obj 23 117 line~;
+#N canvas 0 50 450 278 (subpatch) 0;
+#X array pm_varShapesOsc 512 float 2;
+#X coords 0 1 511 -1 200 140 1;
+#X restore 179 168 graph;
+#X obj 10 332 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 10 352 metro 100;
+#X text 28 330 graph it;
+#X obj -38 154 loadbang;
+#X text 60 52 'good values' are between 0 and 1;
+#X obj -67 231 varShapesOsc~;
+#X msg -38 176 0.5 0.5 1 1;
+#X obj -38 198 unpack f f f f;
+#X obj 10 376 tabwrite~ pm_varShapesOsc;
+#X text 65 68 I always take it quite higher :);
+#X text -69 422 Since the first six inlets are signal inlets \, you
+can modulate them too with oscillators or other signals;
+#X connect 0 0 19 0;
+#X connect 1 0 2 0;
+#X connect 1 0 2 1;
+#X connect 1 0 22 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 1 1;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 19 1;
+#X connect 10 0 11 0;
+#X connect 11 0 12 0;
+#X connect 12 0 9 1;
+#X connect 14 0 15 0;
+#X connect 15 0 22 0;
+#X connect 17 0 20 0;
+#X connect 19 0 1 0;
+#X connect 20 0 21 0;
+#X connect 21 0 19 2;
+#X connect 21 1 19 3;
+#X connect 21 2 19 4;
+#X connect 21 3 19 5;
+#X restore 416 574 pd phase-modulation;
+#X obj 49 234 varShapesOsc~;
+#X obj 49 301 tabwrite~ varShapesOsc;
+#X obj 77 80 hsl 128 15 0 1 0 0 empty empty xfade 5 8 0 10 -262144
+-1 -1 0 1;
+#X obj 145 120 pack f 20;
+#X obj 145 142 line~;
+#X obj 148 100 hsl 128 15 0 1 0 0 empty empty breakpoint 5 8 0 10 -262144
+-1 -1 0 1;
+#X floatatom 215 123 5 0 0 1 rise_power - -, f 5;
+#X obj 215 142 pack f 20;
+#X obj 215 164 line~;
+#X floatatom 285 145 5 0 0 1 fall_power - -, f 5;
+#X obj 285 164 pack f 20;
+#X obj 285 186 line~;
+#X msg 741 124 220 0.5 0.6 6 0.7;
+#X obj 741 146 unpack f f f f f;
+#X obj 741 171 varShapesOsc~;
+#X text 40 21 Various shapes oscillator;
+#X text 424 289 4 (signal)*: breakpoint;
+#X text 570 290 (0 creates a backward sawtooth (when cross-fade is
+at 1);
+#X text 570 306 (1 creates a forward sawtooth (when cross-fade is at
+1);
+#X text 570 321 (0.5 sets breakpoint to the center \, creating a triangle
+or sinewave - depending on the position of the cross-fade);
+#X text 813 358 (lowet value should be 0);
+#X text 424 359 5 (signal)*: power to raise oscillator's rising part
+to;
+#X text 818 377 (lowet value should be 0);
+#X text 424 377 6 (signal)*: power to raise oscillator's falling part
+to;
+#X text 424 476 7 (control): phase reset (0 - 1);
+#X text 424 268 3 (signal)*: cross-fade between sine and triangle;
+#X text 415 621 Alexandros Drymonitis May 2014;
+#X text 502 396 a value of 1 will leave the signal unaltered. values
+greater than one create exponential curves \, and lower than 1 create
+logarithmic curves. when one power is set to 0 and the other to a high
+value (e.g. 1000) you get a square wave and the cross-face becomes
+the duty cycle;
+#X connect 0 0 18 0;
+#X connect 1 0 2 0;
+#X connect 2 0 19 0;
+#X connect 10 0 30 0;
+#X connect 14 0 15 0;
+#X connect 15 0 18 2;
+#X connect 16 0 18 6;
+#X connect 18 0 19 0;
+#X connect 20 0 14 0;
+#X connect 21 0 22 0;
+#X connect 22 0 18 3;
+#X connect 23 0 21 0;
+#X connect 24 0 25 0;
+#X connect 25 0 26 0;
+#X connect 26 0 18 4;
+#X connect 27 0 28 0;
+#X connect 28 0 29 0;
+#X connect 29 0 18 5;
+#X connect 30 0 31 0;
+#X connect 31 0 32 0;
+#X connect 31 1 32 2;
+#X connect 31 2 32 3;
+#X connect 31 3 32 4;
+#X connect 31 4 32 5;
